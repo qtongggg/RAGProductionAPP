@@ -1,26 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Any, List, Optional
 
-# class RAGChunkAndSrc(BaseModel):
-#     chunk: list[str]
-#     source_id: str = None
-
-
-# class RAGUpsertResult(BaseModel):
-#     ingested: int
-
-
-# class RAGSearchResult(BaseModel):
-#     contexts: list[str]
-#     sources: list[str]
-
-# class RAGQueryRequest(BaseModel):
-#     answer: str
-#     sources: list[str]
-#     num_contexts: int
-
-
-
 class MatchResult(BaseModel):
     fit_score: float
     matching_skills: List[str]
@@ -32,12 +12,6 @@ class MatchResult(BaseModel):
 class SummaryJobInfo(BaseModel):
     brief_summary: str
     hr_insights: str
-
-# class EmailRequest(BaseModel):
-#     to: EmailStr
-#     subject: str
-#     html_body: str
-#     sender: optional[EmailStr] = None
 
 class JobSearchInfo(BaseModel):
     job_id: str

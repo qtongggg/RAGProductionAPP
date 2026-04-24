@@ -14,7 +14,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from MCP_agent.agent_setup import startup_mcp, shutdown_mcp
 from Agents.Base_agent import AgentInfo
-from custom.custom_types import JobSearchRequest
+from custom.custom_types import JobSearchRequest, AgentResult
 from tools.pdf_ingester import ingest_pdf_hybrid
 
 from Agents.orchestrator import OrchestratorAgent
@@ -147,6 +147,14 @@ job_search_agent  = JobSearchAgentClass(AgentInfo(
 
 registry.register('job_search_agent', job_search_agent)
 
+from Agents.email_agent import EmailAgent as EmailAgentClass
+
+email_agent = EmailAgentClass(AgentInfo(
+    name="email_agent",
+    description="An agent that make use of the google email api to sent, draft or check the email for the user "
+))
+
+registry.register('email_agent', email_agent)
 # =========================================================
 # API ROUTES (NOW CLEAN)
 # =========================================================
@@ -196,31 +204,19 @@ async def search_jobs_api(request: JobSearchRequest):
 
 #     return result
 
-# @app.post("/api/rag/query")
-# async def query_rag(payload: RagQueryRequest):
-#     try:
-#         response = await orchestrator.run_pipeline(
-#             payload.question,
-#             payload.top_k
-#         )
+@app.post("/api/rag/query")
+async def query_rag(payload: RagQueryRequest):
+    try:
+        return await orchestrator.run_pipeline(
+            payload.question,
+            payload.top_k
+        )
 
-#         return {
-#             "ok": response.get("ok", True),
-#             "answer": response.get("answer", ""),
-#             "sources": response.get("sources", []),
-#             "mode": response.get("mode", "qa"),
-#             "jobs": response.get("jobs", []),
-#             "error": response.get("error"),
-#         }
+    except Exception as e:
+        logging.exception("query_rag failed")
 
-#     except Exception as e:
-#         logging.exception("query_rag failed")
-
-#         return {
-#             "ok": False,
-#             "answer": "",
-#             "sources": [],
-#             "mode": "qa",
-#             "jobs": [],
-#             "error": str(e),
-#         }
+        return AgentResult(
+            status="error",
+            data={},
+            error=str(e)
+        ).model_dump()

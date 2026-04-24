@@ -105,21 +105,6 @@ class JobSearchAgent(BaseAgent):
             )
 
             #####################
-            # 4. Email agent 
-            #####################            
-            email_agent = EmailAgent(
-                AgentInfo(
-                    name="EmailAgent",
-                    description="An agent that generates email content based on job search results."
-                )
-            )
-            await email_agent.run(
-                context=matched_jobs,
-                user_email="smartqingtong@gmail.com"
-            )
-            
-
-            #####################
             # 4. FINAL RESPONSE
             #####################
             return AgentResult(

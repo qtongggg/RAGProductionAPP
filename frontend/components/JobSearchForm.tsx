@@ -38,14 +38,16 @@ export default function JobSearchForm() {
       setLoading(true);
       setError("");
       setJobs([]);
-
-      const data = await searchJobs({
+      
+      const response = await searchJobs({
         keyword,
         location,
         per_page: perPage,
       });
 
-      const sortedJobs = [...(data.jobs || [])].sort(
+      const jobs = response?.data?.jobs ?? [];
+
+      const sortedJobs = [...jobs].sort(
         (a, b) => (b.fit_score || 0) - (a.fit_score || 0)
       );
 
