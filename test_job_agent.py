@@ -24,7 +24,6 @@ async def main():
         top_k = 5,
         candidate_name = "mah_qing_tong"
     )
-    print(result)
 
     await shutdown_mcp()   # 👈 IMPORTANT FIX
 
