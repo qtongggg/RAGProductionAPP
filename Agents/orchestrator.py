@@ -241,7 +241,7 @@ class OrchestratorAgent:
     # -----------------------------------------------------
     # MAIN PIPELINE
     # -----------------------------------------------------
-    async def run_pipeline(self, question: str, top_k: int = 5):
+    async def run_pipeline(self, question: str, location: str = "Malaysia", top_k: int = 5):
         logger.info("====================================")
         logger.info("🔥 START ORCHESTRATOR PIPELINE")
         logger.info("====================================")

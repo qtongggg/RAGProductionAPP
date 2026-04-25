@@ -178,20 +178,27 @@ async def upload_pdf(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/api/jobs/search")
-async def search_jobs_api(request: JobSearchRequest):
+async def search_jobs_api(payload: JobSearchRequest):
+    try:
+        result = await orchestrator.run(
+            name="job_search_agent",
+            user_input=payload.keyword,
+            location=payload.location,
+            per_page=payload.per_page,
+            page=1
+        )
 
-    result = await orchestrator.run(
-        "job_search_agent",
-        request.keyword,
-        location=request.location,
-        per_page=request.per_page,
-        page=1
-    )
+        return result
 
-    return result
+    except Exception as e:
+        logging.exception("search_jobs_api failed")
 
+        return AgentResult(
+            status="error",
+            data={},
+            error=str(e)
+        ).model_dump()
 
 # @app.post("/api/jobs/resume")
 # async def search_resume_api(request: ResumeSearchRequest):

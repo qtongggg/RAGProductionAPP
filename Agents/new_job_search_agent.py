@@ -3,7 +3,6 @@ from MCP_agent.agent_setup import get_mcp_tools
 import asyncio
 import logging
 
-from Agents.email_agent import EmailAgent
 from custom.custom_types import (
     AgentResult,
     JobSearchRequest,
@@ -18,12 +17,12 @@ class JobSearchAgent(BaseAgent):
 
     def __init__(self, info: AgentInfo):
         super().__init__(info)
-        self._tools = None
+    #     self._tools = None
 
-    async def get_tools(self):
-        if self._tools is None:
-            self._tools = await get_mcp_tools()
-        return self._tools
+    # async def get_tools(self):
+    #     if self._tools is None:
+    #         self._tools = await get_mcp_tools()
+    #     return self._tools
 
     async def run_background_task(self, coro, logger, task_name="task"):
         try:
